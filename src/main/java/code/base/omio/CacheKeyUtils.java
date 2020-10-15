@@ -13,7 +13,7 @@ public class CacheKeyUtils {
         //senior
         int seniorCount = cacheKey.getSeniorCount();
         int index = seniorCount;
-        while (calculatePassengerCountLessThan9(cacheKey)) {
+        while (ifTotalPassengerCountLessThan9(cacheKey)) {
             index++;
             cacheKey.setSeniorCount(index);
             relatedCacheKeys.add(toCacheKeyString(cacheKey));
@@ -23,7 +23,7 @@ public class CacheKeyUtils {
         //adult
         int adultCount = cacheKey.getAdultCount();
         index = adultCount;
-        while (calculatePassengerCountLessThan9(cacheKey)) {
+        while (ifTotalPassengerCountLessThan9(cacheKey)) {
             index++;
             cacheKey.setAdultCount(index);
             relatedCacheKeys.add(toCacheKeyString(cacheKey));
@@ -33,7 +33,7 @@ public class CacheKeyUtils {
         //youth
         int youthCount = cacheKey.getYouthCount();
         index = youthCount;
-        while (calculatePassengerCountLessThan9(cacheKey)) {
+        while (ifTotalPassengerCountLessThan9(cacheKey)) {
             index++;
             cacheKey.setYouthCount(index);
             relatedCacheKeys.add(toCacheKeyString(cacheKey));
@@ -43,7 +43,7 @@ public class CacheKeyUtils {
         //child
         int childCount = cacheKey.getChildCount();
         index = childCount;
-        while (calculatePassengerCountLessThan9(cacheKey)) {
+        while (ifTotalPassengerCountLessThan9(cacheKey)) {
             index++;
             cacheKey.setChildCount(index);
             relatedCacheKeys.add(toCacheKeyString(cacheKey));
@@ -88,7 +88,7 @@ public class CacheKeyUtils {
         return stringJoiner.toString();
     }
 
-    private boolean calculatePassengerCountLessThan9(CacheKey cacheKey) {
+    private boolean ifTotalPassengerCountLessThan9(CacheKey cacheKey) {
         return cacheKey.getSeniorCount()+ cacheKey.getAdultCount()+ cacheKey.getYouthCount()+ cacheKey.getChildCount()+ cacheKey.getInfantCount() < 9;
     }
 }
