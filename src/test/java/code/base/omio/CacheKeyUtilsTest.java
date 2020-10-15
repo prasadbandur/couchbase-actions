@@ -10,7 +10,7 @@ class CacheKeyUtilsTest {
     private CacheKeyUtils cacheKeyUtils = new CacheKeyUtils();
 
     @Test
-    void for1Adult() {
+    void for1AdultRoundTrip() {
         String cacheKey = "deutscheBahn|12345|67890|2020-12-01|2020-12-02|0|1|0|0|0|<discCardHash>|<abParamterHash>";
         List<String> relatedCacheKeys = cacheKeyUtils.getRelatedCacheKeys(cacheKey);
 
@@ -52,7 +52,7 @@ class CacheKeyUtilsTest {
     }
 
     @Test
-    void for2Senior2Adult() {
+    void for2Senior2AdultRoundTrip() {
         String cacheKey = "deutscheBahn|12345|67890|2020-12-01|2020-12-02|2|2|0|0|0|<discCardHash>|<abParamterHash>";
         List<String> relatedCacheKeys = cacheKeyUtils.getRelatedCacheKeys(cacheKey);
 
@@ -90,7 +90,7 @@ class CacheKeyUtilsTest {
     }
 
     @Test
-    void forTotal8PassengersWithNoInfant() {
+    void forTotal8PassengersWithNoInfantRoundTrip() {
         String cacheKey = "deutscheBahn|12345|67890|2020-12-01|2020-12-02|2|3|1|2|0|<discCardHash>|<abParamterHash>";
         List<String> relatedCacheKeys = cacheKeyUtils.getRelatedCacheKeys(cacheKey);
 
@@ -99,6 +99,19 @@ class CacheKeyUtilsTest {
                 "deutscheBahn|12345|67890|2020-12-01|2020-12-02|2|4|1|2|0|<discCardHash>|<abParamterHash>",
                 "deutscheBahn|12345|67890|2020-12-01|2020-12-02|2|3|2|2|0|<discCardHash>|<abParamterHash>",
                 "deutscheBahn|12345|67890|2020-12-01|2020-12-02|2|3|1|3|0|<discCardHash>|<abParamterHash>"
+        ));
+    }
+
+    @Test
+    void forTotal8PassengersWithNoInfantOneWay() {
+        String cacheKey = "deutscheBahn|12345|67890|2020-12-01||2|3|1|2|0|<discCardHash>|<abParamterHash>";
+        List<String> relatedCacheKeys = cacheKeyUtils.getRelatedCacheKeys(cacheKey);
+
+        Assertions.assertThat(relatedCacheKeys).containsExactlyInAnyOrderElementsOf(List.of(
+                "deutscheBahn|12345|67890|2020-12-01||3|3|1|2|0|<discCardHash>|<abParamterHash>",
+                "deutscheBahn|12345|67890|2020-12-01||2|4|1|2|0|<discCardHash>|<abParamterHash>",
+                "deutscheBahn|12345|67890|2020-12-01||2|3|2|2|0|<discCardHash>|<abParamterHash>",
+                "deutscheBahn|12345|67890|2020-12-01||2|3|1|3|0|<discCardHash>|<abParamterHash>"
         ));
     }
 }

@@ -10,7 +10,47 @@ public class CacheKeyUtils {
     public List<String> getRelatedCacheKeys(String cacheKeyToDelete) {
         List<String> relatedCacheKeys = new ArrayList<>();
         CacheKey cacheKey = toCacheKeyObject(cacheKeyToDelete);
-        //senior
+        populateSeniorRelatedCacheKeys(relatedCacheKeys, cacheKey);
+        populateAdultRelatedCacheKeys(relatedCacheKeys, cacheKey);
+        populateYouthRelatedCacheKeys(relatedCacheKeys, cacheKey);
+        populateChildrenRelatedCacheKeys(relatedCacheKeys, cacheKey);
+        return relatedCacheKeys;
+    }
+
+    private void populateChildrenRelatedCacheKeys(List<String> relatedCacheKeys, CacheKey cacheKey) {
+        int childCount = cacheKey.getChildCount();
+        int index = childCount;
+        while (ifTotalPassengerCountLessThan9(cacheKey)) {
+            index++;
+            cacheKey.setChildCount(index);
+            relatedCacheKeys.add(toCacheKeyString(cacheKey));
+        }
+        cacheKey.setChildCount(childCount);
+    }
+
+    private void populateYouthRelatedCacheKeys(List<String> relatedCacheKeys, CacheKey cacheKey) {
+        int youthCount = cacheKey.getYouthCount();
+        int index = youthCount;
+        while (ifTotalPassengerCountLessThan9(cacheKey)) {
+            index++;
+            cacheKey.setYouthCount(index);
+            relatedCacheKeys.add(toCacheKeyString(cacheKey));
+        }
+        cacheKey.setYouthCount(youthCount);
+    }
+
+    private void populateAdultRelatedCacheKeys(List<String> relatedCacheKeys, CacheKey cacheKey) {
+        int adultCount = cacheKey.getAdultCount();
+        int index = adultCount;
+        while (ifTotalPassengerCountLessThan9(cacheKey)) {
+            index++;
+            cacheKey.setAdultCount(index);
+            relatedCacheKeys.add(toCacheKeyString(cacheKey));
+        }
+        cacheKey.setAdultCount(adultCount);
+    }
+
+    private void populateSeniorRelatedCacheKeys(List<String> relatedCacheKeys, CacheKey cacheKey) {
         int seniorCount = cacheKey.getSeniorCount();
         int index = seniorCount;
         while (ifTotalPassengerCountLessThan9(cacheKey)) {
@@ -19,38 +59,6 @@ public class CacheKeyUtils {
             relatedCacheKeys.add(toCacheKeyString(cacheKey));
         }
         cacheKey.setSeniorCount(seniorCount);
-
-        //adult
-        int adultCount = cacheKey.getAdultCount();
-        index = adultCount;
-        while (ifTotalPassengerCountLessThan9(cacheKey)) {
-            index++;
-            cacheKey.setAdultCount(index);
-            relatedCacheKeys.add(toCacheKeyString(cacheKey));
-        }
-        cacheKey.setAdultCount(adultCount);
-
-        //youth
-        int youthCount = cacheKey.getYouthCount();
-        index = youthCount;
-        while (ifTotalPassengerCountLessThan9(cacheKey)) {
-            index++;
-            cacheKey.setYouthCount(index);
-            relatedCacheKeys.add(toCacheKeyString(cacheKey));
-        }
-        cacheKey.setYouthCount(youthCount);
-
-        //child
-        int childCount = cacheKey.getChildCount();
-        index = childCount;
-        while (ifTotalPassengerCountLessThan9(cacheKey)) {
-            index++;
-            cacheKey.setChildCount(index);
-            relatedCacheKeys.add(toCacheKeyString(cacheKey));
-        }
-        cacheKey.setChildCount(childCount);
-
-        return relatedCacheKeys;
     }
 
     private CacheKey toCacheKeyObject(String cacheKey) {
@@ -60,7 +68,7 @@ public class CacheKeyUtils {
         cacheKeyParts.setDeparturePositionId(Long.parseLong(cacheKeySplits[1]));
         cacheKeyParts.setArrivalPositionId(Long.parseLong(cacheKeySplits[2]));
         cacheKeyParts.setDepartureDate(LocalDate.parse(cacheKeySplits[3]));
-        cacheKeyParts.setReturnDate(cacheKeySplits[4] == null ? null: LocalDate.parse(cacheKeySplits[4]));
+        cacheKeyParts.setReturnDate((cacheKeySplits[4] == null || "".equals(cacheKeySplits[4].trim()))? null: LocalDate.parse(cacheKeySplits[4]));
         cacheKeyParts.setSeniorCount(Integer.parseInt(cacheKeySplits[5]));
         cacheKeyParts.setAdultCount(Integer.parseInt(cacheKeySplits[6]));
         cacheKeyParts.setYouthCount(Integer.parseInt(cacheKeySplits[7]));
@@ -77,7 +85,7 @@ public class CacheKeyUtils {
         stringJoiner.add(String.valueOf(cacheKey.getDeparturePositionId()));
         stringJoiner.add(String.valueOf(cacheKey.getArrivalPositionId()));
         stringJoiner.add(cacheKey.getDepartureDate().toString());
-        stringJoiner.add(cacheKey.getReturnDate() == null ? null : cacheKey.getReturnDate().toString());
+        stringJoiner.add(cacheKey.getReturnDate() == null ? "" : cacheKey.getReturnDate().toString());
         stringJoiner.add(String.valueOf(cacheKey.getSeniorCount()));
         stringJoiner.add(String.valueOf(cacheKey.getAdultCount()));
         stringJoiner.add(String.valueOf(cacheKey.getYouthCount()));
